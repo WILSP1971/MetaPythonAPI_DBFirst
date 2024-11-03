@@ -92,7 +92,7 @@ def verificar_token(req):
 
 def recibir_mensajes(req):
     req = request.get_json()
-    agregar_mensajes_log()
+    agregar_mensajes_log(req)
     
     # try:
     #     req = request.get_json()
