@@ -30,7 +30,7 @@ db = SQLAlchemy(app)
 class Log(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fechahora = db.Column(db.DateTime, default=datetime.datetime.today)
-    texto = db.Column(db.TEXT)
+    mensajelog = db.Column(db.TEXT)
 
 ## Creacion tabla si no existe
 with app.app_context():
@@ -61,7 +61,7 @@ mensajes_log = []
 def agregar_mensajes_log(texto):
     mensajes_log.append(texto)
     #Guardar el mensaje en BD
-    nuevo_registro = Log(texto=texto)
+    nuevo_registro = Log(mensajelog=texto)
     db.session.add(nuevo_registro)
     db.session.commit()
 
@@ -91,21 +91,21 @@ def verificar_token(req):
 
 
 def recibir_mensajes(req):
-    req = request.get_json()
-    agregar_mensajes_log(req)
+    # req = request.get_json()
+    # agregar_mensajes_log(req)
     
-    # try:
-    #     req = request.get_json()
-    #     entry = req['entry'][0]
-    #     changes = entry['changes'][0]
-    #     value = changes['value']
-    #     objeto_message = value['messages']
+    try:
+        req = request.get_json()
+        entry = req['entry'][0]
+        changes = entry['changes'][0]
+        value = changes['value']
+        objeto_mensaje = value['messages']
 
-    #     agregar_mensajes_log(json.dumps.objeto_message)
+        agregar_mensajes_log(json.dumps(objeto_mensaje))
 
-    return jsonify({'message':'EVENT_RECEIVED'})
-    # except Exception as e:
-    #     return jsonify({'error':'ERROR'})
+        return jsonify({'message':'EVENT_RECEIVED'})
+    except Exception as e:
+        return jsonify({'error':'ERROR'})
 
 
     
