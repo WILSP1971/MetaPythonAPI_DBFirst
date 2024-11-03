@@ -61,7 +61,7 @@ mensajes_log = []
 def agregar_mensajes_log(texto):
     mensajes_log.append(texto)
     #Guardar el mensaje en BD
-    nuevo_registro = Log(texto=texto)
+    nuevo_registro = Log(Observacion=texto)
     db.session.add(nuevo_registro)
     db.session.commit()
 
