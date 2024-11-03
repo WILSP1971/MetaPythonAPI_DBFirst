@@ -107,13 +107,17 @@ def recibir_mensajes(req):
 
             if "type" in messages:
                 tipo = messages["type"]
+                agregar_mensajes_log(json.dumps(messages))
+                
                 if tipo == "interactive":
                     return 0
                 if "text" in messages:
                     text = messages["text"]["body"]
                     numero = messages["from"]
-                    agregar_mensajes_log(json.dumps(text))
-                    agregar_mensajes_log(json.dumps(numero))
+                    enviar_mensaje_whatapps(text,numero)
+
+                    #Guardar Log en la BD
+                    agregar_mensajes_log(json.dumps(messages))
 
         return jsonify({'message':'EVENT_RECEIVED'})
     except Exception as e:
