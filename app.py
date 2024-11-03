@@ -16,6 +16,7 @@
 
 import datetime
 import json
+import http.client
 from flask import Flask,render_template,request,jsonify
 from flask_sqlalchemy import SQLAlchemy
 
@@ -117,6 +118,51 @@ def recibir_mensajes(req):
         return jsonify({'message':'EVENT_RECEIVED'})
     except Exception as e:
         return jsonify({'error':'ERROR'})
+
+def enviar_mensaje_whatapps(texto,number):
+    texto = texto.lower()
+    if "hola" in texto:
+        data={
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": number,
+            "type": "text",
+            "text": {
+                "preview_url": False,
+                "body": "🚀 Hola, ¿Cómo estás? Bienvenido."
+            }
+        }
+    else:
+        data={
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": number,
+            "type": "text",
+            "text": {
+                "preview_url": False,
+                "body": "🚀 Hola, visita mi web twsbarranquilla.com para más información.\n \n📌Por favor, ingresa un número #️⃣ para recibir información.\n \n1️⃣. Información del Curso. ❔\n2️⃣. Ubicación del local. 📍\n3️⃣. Enviar temario en PDF. 📄\n4️⃣. Audio explicando curso. 🎧\n5️⃣. Video de Introducción. ⏯️\n6️⃣. Hablar con AnderCode. 🙋‍♂️\n7️⃣. Horario de Atención. 🕜 \n0️⃣. Regresar al Menú. 🕜"
+            }
+        }
+
+    ## Convertir a el diccionario en formato json
+    data = json.dumps(data)        
+
+    headers = {
+        "Content-Type" : "application/json",
+        "Authorization" : "Bearer EAAPgwBHqKVgBO18PVpQ9BWTsRWH7o1pr9Mc4xMFsl7CkvaXwiGZAkwSkHHjWRAtaZAidiZB6dx4ZAqY2v57mwjECfkqUsFlCn1ZCQe4pF02keC3ljS3mpo8P5KLvrXjPxvHh10wDlMTbvACx2ejZC5U1aqOb2n5KopjV71rrwgGGG09tVEnOKLmEHoZBb3ZArzcTvGhR2ik06RiM04Ci5ZAv9GzIZD"
+    }
+
+    connection = http.client.HTTPSConnection("graph.facebook.com")
+
+    try:
+        connection.request("POST","/v21.0/489807960875135/messages", data, headers)
+        response = connection.getresponse()
+        print(response.status, response.reason)
+    except Exception as e:
+        agregar_mensajes_log(json.dumps(e))
+    finally:
+        connection.close()
+
 
 if __name__ == '__main__':
     app.run(debug=True)
