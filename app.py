@@ -61,7 +61,7 @@ mensajes_log = []
 def agregar_mensajes_log(texto):
     mensajes_log.append(texto)
     #Guardar el mensaje en BD
-    nuevo_registro = Log(texto)
+    nuevo_registro = Log(mensajelog=texto)
     db.session.add(nuevo_registro)
     db.session.commit()
 
@@ -113,12 +113,7 @@ def recibir_mensajes(req):
                     numero = messages["from"]
                     agregar_mensajes_log(json.dumps(text))
                     agregar_mensajes_log(json.dumps(numero))
-
-
-
-
-
-
+                    
         return jsonify({'message':'EVENT_RECEIVED'})
     except Exception as e:
         return jsonify({'error':'ERROR'})
