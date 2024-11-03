@@ -30,7 +30,7 @@ db = SQLAlchemy(app)
 class Log(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fechahora = db.Column(db.DateTime, default=datetime.datetime.today)
-    Observacion = db.Column(db.TEXT)
+    texto = db.Column(db.TEXT)
 
 ## Creacion tabla si no existe
 with app.app_context():
@@ -61,7 +61,7 @@ mensajes_log = []
 def agregar_mensajes_log(texto):
     mensajes_log.append(texto)
     #Guardar el mensaje en BD
-    nuevo_registro = Log(Observacion=texto)
+    nuevo_registro = Log(texto=texto)
     db.session.add(nuevo_registro)
     db.session.commit()
 
