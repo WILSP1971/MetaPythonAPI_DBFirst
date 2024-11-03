@@ -81,7 +81,7 @@ def webhook():
 
 def verificar_token(req):
     token = req.args.get('hub.verify_token')
-    challenge = req.args.get('hub.chellenge')
+    challenge = req.args.get('hub.challenge')
 
     if token and challenge == TOKEN_TWSCODE:
         return challenge
