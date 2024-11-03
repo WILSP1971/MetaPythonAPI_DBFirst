@@ -91,21 +91,21 @@ def verificar_token(req):
 
 
 def recibir_mensajes(req):
-    # req = request.get_json()
-    # agregar_mensajes_log()
+    req = request.get_json()
+    agregar_mensajes_log()
     
-    try:
-        req = request.get_json()
-        entry = req['entry'][0]
-        changes = entry['changes'][0]
-        value = changes['value']
-        objeto_message = value['messages']
+    # try:
+    #     req = request.get_json()
+    #     entry = req['entry'][0]
+    #     changes = entry['changes'][0]
+    #     value = changes['value']
+    #     objeto_message = value['messages']
 
-        agregar_mensajes_log(json.dumps.objeto_message)
+    #     agregar_mensajes_log(json.dumps.objeto_message)
 
-        return jsonify({'message':'EVENT_RECEIVED'})
-    except Exception as e:
-         return jsonify({'error':'ERROR'})
+    return jsonify({'message':'EVENT_RECEIVED'})
+    # except Exception as e:
+    #     return jsonify({'error':'ERROR'})
 
 
     
