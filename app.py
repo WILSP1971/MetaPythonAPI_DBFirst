@@ -83,17 +83,29 @@ def verificar_token(req):
     token = req.args.get('hub.verify_token')
     challenge = req.args.get('hub.challenge')
 
-    if token and challenge == TOKEN_TWSCODE:
+    #and challenge
+    if token == TOKEN_TWSCODE:
         return challenge
     else:
         return jsonify({'error':'TOKEN INVAVALIDO'}),401
 
 
 def recibir_mensajes(req):
-    req = request.get_json()
-    agregar_mensajes_log()
+    # req = request.get_json()
+    # agregar_mensajes_log()
     
-    return jsonify({'message':'EVENT_RECEIVED'})
+    try:
+        req = request.get_json()
+        entry = req['entry'][0]
+        changes = entry['changes'][0]
+        value = changes['value']
+        objeto_message = value['messages']
+
+        agregar_mensajes_log(json.dumps.objeto_message)
+
+        return jsonify({'message':'EVENT_RECEIVED'})
+    except Exception as e:
+         return jsonify({'error':'ERROR'})
 
 
     
