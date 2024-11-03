@@ -108,7 +108,7 @@ def recibir_mensajes(req):
             if "type" in messages:
                 tipo = messages["type"]
                 agregar_mensajes_log(json.dumps(messages))
-                
+
                 if tipo == "interactive":
                     return 0
                 if "text" in messages:
@@ -153,7 +153,7 @@ def enviar_mensaje_whatapps(texto,number):
 
     headers = {
         "Content-Type" : "application/json",
-        "Authorization" : "Bearer EAAPgwBHqKVgBO18PVpQ9BWTsRWH7o1pr9Mc4xMFsl7CkvaXwiGZAkwSkHHjWRAtaZAidiZB6dx4ZAqY2v57mwjECfkqUsFlCn1ZCQe4pF02keC3ljS3mpo8P5KLvrXjPxvHh10wDlMTbvACx2ejZC5U1aqOb2n5KopjV71rrwgGGG09tVEnOKLmEHoZBb3ZArzcTvGhR2ik06RiM04Ci5ZAv9GzIZD"
+        "Authorization" : "Bearer EAAPgwBHqKVgBO1bWABc1T9wbx7vmK8QUT3skOFntvV33zXcCbvRR03hJZATUdYnX0MuNQSsYVcWCkE2sVKJ1yboqCqPILliWiVucpqRlEpNzR2U0TkSMsu4IvHttQP7Rhkv8wSQZAegPaCo1weGmsFXZAiPZBGME6xImFc5j6qtkr3sWdd3TqznackbXDy0Jn4IUE3D1LOCTUJpFKJUxKfMZD"
     }
 
     connection = http.client.HTTPSConnection("graph.facebook.com")
