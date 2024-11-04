@@ -383,7 +383,7 @@ def enviar_mensaje_whatapps(texto,number):
         data={
             "messaging_product": "whatsapp",
             "recipient_type": "individual",
-            # "to": number,
+            "to": number,
             "type": "text",
             "text": {
                 "preview_url": False,
