@@ -90,7 +90,6 @@ def verificar_token(req):
     else:
         return jsonify({'error':'TOKEN INVAVALIDO'}),401
 
-
 def recibir_mensajes(req):
     # req = request.get_json()
     # agregar_mensajes_log(req)
@@ -109,8 +108,23 @@ def recibir_mensajes(req):
                 tipo = messages["type"]
                 agregar_mensajes_log(json.dumps(messages))
 
+
                 if tipo == "interactive":
-                    return 0
+                    tipo_interactivo = messages["interactive"]["type"]
+
+                    if tipo_interactivo == "button_reply":
+                        text = messages["interactive"]["button_reply"]["id"]
+                        numero = messages["from"]
+
+                        enviar_mensaje_whatapps(text,numero)
+                    
+                    elif tipo_interactivo == "list_reply":
+                        text = messages["interactive"]["list_reply"]["id"]
+                        numero = messages["from"]
+
+                        enviar_mensaje_whatapps(text,numero)
+
+
                 if "text" in messages:
                     text = messages["text"]["body"]
                     numero = messages["from"]
@@ -134,6 +148,235 @@ def enviar_mensaje_whatapps(texto,number):
             "text": {
                 "preview_url": False,
                 "body": "🚀 Hola, ¿Cómo estás? Bienvenido."
+            }
+        }
+    elif "1" in texto:
+        data = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": number,
+            "type": "text",
+            "text": {
+                "preview_url": False,
+                "body": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+            }
+        }
+    elif "2" in texto:
+        data = {
+            "messaging_product": "whatsapp",
+            "to": number,
+            "type": "location",
+            "location": {
+                "latitude": "-12.067158831865067",
+                "longitude": "-77.03377940839486",
+                "name": "Estadio Nacional del Perú",
+                "address": "Cercado de Lima"
+            }
+        }
+    elif "3" in texto:
+        data={
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": number,
+            "type": "document",
+            "document": {
+                    "link": "https://www.turnerlibros.com/wp-content/uploads/2021/02/ejemplo.pdf",
+                    "caption": "Temario del Curso #001"
+                }
+            }
+    elif "4" in texto:
+        data={
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": number,
+            "type": "audio",
+            "audio": {
+                "link": "https://filesamples.com/samples/audio/mp3/sample1.mp3"
+            }
+        }
+    elif "5" in texto:
+        data = {
+            "messaging_product": "whatsapp",
+            "to": number,
+            "text": {
+                "preview_url": True,
+                "body": "Introduccion al curso! https://youtu.be/6ULOE2tGlBM"
+            }
+        }
+    elif "6" in texto:
+        data = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": number,
+            "type": "text",
+            "text": {
+                "preview_url": False,
+                "body": "🤝 En breve me pondre en contacto contigo. 🤓"
+            }
+        }
+    elif "7" in texto:
+        data = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": number,
+            "type": "text",
+            "text": {
+                "preview_url": False,
+                "body": "📅 Horario de Atención : Lunes a Viernes. \n🕜 Horario : 9:00 am a 5:00 pm 🤓"
+            }
+        }
+    elif "0" in texto:
+        data = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": number,
+            "type": "text",
+            "text": {
+                "preview_url": False,
+                "body": "🚀 Hola, visita mi web anderson-bastidas.com para más información.\n \n📌Por favor, ingresa un número #️⃣ para recibir información.\n \n1️⃣. Información del Curso. ❔\n2️⃣. Ubicación del local. 📍\n3️⃣. Enviar temario en PDF. 📄\n4️⃣. Audio explicando curso. 🎧\n5️⃣. Video de Introducción. ⏯️\n6️⃣. Hablar con AnderCode. 🙋‍♂️\n7️⃣. Horario de Atención. 🕜 \n0️⃣. Regresar al Menú. 🕜"
+            }
+        }
+    elif "boton" in texto:
+        data = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": number,
+            "type": "interactive",
+            "interactive":{
+                "type":"button",
+                "body": {
+                    "text": "¿Confirmas tu registro?"
+                },
+                "footer": {
+                    "text": "Selecciona una de las opciones"
+                },
+                "action": {
+                    "buttons":[
+                        {
+                            "type": "reply",
+                            "reply":{
+                                "id":"btnsi",
+                                "title":"Si"
+                            }
+                        },{
+                            "type": "reply",
+                            "reply":{
+                                "id":"btnno",
+                                "title":"No"
+                            }
+                        },{
+                            "type": "reply",
+                            "reply":{
+                                "id":"btntalvez",
+                                "title":"Tal Vez"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    elif "btnsi" in texto:
+        data = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": number,
+            "type": "text",
+            "text": {
+                "preview_url": False,
+                "body": "Muchas Gracias por Aceptar."
+            }
+        }
+    elif "btnno" in texto:
+        data = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": number,
+            "type": "text",
+            "text": {
+                "preview_url": False,
+                "body": "Es una Lastima."
+            }
+        }
+    elif "btntalvez" in texto:
+        data = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": number,
+            "type": "text",
+            "text": {
+                "preview_url": False,
+                "body": "Estare a la espera."
+            }
+        }
+    elif "lista" in texto:
+        data ={
+            "messaging_product": "whatsapp",
+            "to": number,
+            "type": "interactive",
+            "interactive":{
+                "type" : "list",
+                "body": {
+                    "text": "Selecciona Alguna Opción"
+                },
+                "footer": {
+                    "text": "Selecciona una de las opciones para poder ayudarte"
+                },
+                "action":{
+                    "button":"Ver Opciones",
+                    "sections":[
+                        {
+                            "title":"Compra y Venta",
+                            "rows":[
+                                {
+                                    "id":"btncompra",
+                                    "title" : "Comprar",
+                                    "description": "Compra los mejores articulos de tecnologia"
+                                },
+                                {
+                                    "id":"btnvender",
+                                    "title" : "Vender",
+                                    "description": "Vende lo que ya no estes usando"
+                                }
+                            ]
+                        },{
+                            "title":"Distribución y Entrega",
+                            "rows":[
+                                {
+                                    "id":"btndireccion",
+                                    "title" : "Local",
+                                    "description": "Puedes visitar nuestro local."
+                                },
+                                {
+                                    "id":"btnentrega",
+                                    "title" : "Entrega",
+                                    "description": "La entrega se realiza todos los dias."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    elif "btncompra" in texto:
+        data = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": number,
+            "type": "text",
+            "text": {
+                "preview_url": False,
+                "body": "Los mejos articulos top en ofertas."
+            }
+        }
+    elif "btnvender" in texto:
+        data = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": number,
+            "type": "text",
+            "text": {
+                "preview_url": False,
+                "body": "Excelente elección."
             }
         }
     else:
