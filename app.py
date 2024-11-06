@@ -141,7 +141,7 @@ def recibir_mensajes(req):
 
 def enviar_mensaje_whatapps(texto,number):
     texto = texto.lower()
-    if ("hola" in texto) or ("buenos dias in texto") or ("buenas tardes" in texto):
+    if ("hola" in texto) or ("buenos dias" in texto) or ("buenas tardes" in texto):
         data={
             "messaging_product": "whatsapp",
             "recipient_type": "individual",
@@ -149,7 +149,7 @@ def enviar_mensaje_whatapps(texto,number):
             "type": "text",
             "text": {
                 "preview_url": False,
-                "body": "🚀 Hola, ¿Cómo estás? Bienvenido."
+                "body": "🚀 Hola Bienvenido!!, Por favor, ingresa un número #️⃣ para recibir información.\n \n1️⃣. Información de Citas. ❔\n2️⃣. Ubicación Sedes. 📍\n3️⃣. Horario de Atención. 📄\n4️⃣. Regresar al Menú. 🕜"
             }
         }
     elif "1" in texto:
