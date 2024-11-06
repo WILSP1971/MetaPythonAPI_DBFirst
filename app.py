@@ -17,6 +17,8 @@
 import datetime
 import json
 import http.client
+
+import requests
 from flask import Flask,render_template,request,jsonify
 from flask_sqlalchemy import SQLAlchemy
 
@@ -139,7 +141,7 @@ def recibir_mensajes(req):
 
 def enviar_mensaje_whatapps(texto,number):
     texto = texto.lower()
-    if "hola" in texto:
+    if ("hola" in texto) or ("buenos dias in texto") or ("buenas tardes" in texto):
         data={
             "messaging_product": "whatsapp",
             "recipient_type": "individual",
@@ -151,16 +153,17 @@ def enviar_mensaje_whatapps(texto,number):
             }
         }
     elif "1" in texto:
-        data = {
-            "messaging_product": "whatsapp",
-            "recipient_type": "individual",
-            "to": number,
-            "type": "text",
-            "text": {
-                "preview_url": False,
-                "body": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-            }
-        }
+        # data = {
+        #     "messaging_product": "whatsapp",
+        #     "recipient_type": "individual",
+        #     "to": number,
+        #     "type": "text",
+        #     "text": {
+        #         "preview_url": False,
+        #         "body": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+        #     }
+        # }
+        traer_datoscedula("72170486",number)
     elif "2" in texto:
         data = {
             "messaging_product": "whatsapp",
@@ -410,10 +413,48 @@ def enviar_mensaje_whatapps(texto,number):
     finally:
         connection.close()
 
+## Funcion Verifica Cedula en BD
+def traer_datoscedula(nocedula,number):
+    api_url = "https://appsintranet.grupocampbell.com/ApiCampbell/api/Pacientes"
+    args = {"CodigoEmp": "C30", "criterio": nocedula}
+    responget = requests.get(api_url, params=args)
+    arraydata = responget.json()
+    for key, value in arraydata.items():
+        if value == "1": 
+           datospac = arraydata["Paciente"]
+           break
 
+        data = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": number,
+            "type": "text",
+            "text": {
+                "preview_url": False,
+                "body": "Pciente es: " + datospac
+            }
+        }
+    ## Convertir a el diccionario en formato json
+    data = json.dumps(datospac)        
+
+    headers = {
+        "Content-Type" : "application/json",
+        "Authorization" : "Bearer EAAPgwBHqKVgBO6GQ5J6R9r6EIZBz5OMZBRK6aaRiMCrZC2hKKnuQlpMmLLcrktgdCawUWfdvom3gJKZBxdozK3vDfrAsMdb4fAmTREVC29B69ZAIzqwhQz5hT65twRBjAZCZCwZCXMJaEDFyX55yFPIS6uRbvHU9sJvfqDGs0aNQtzX0HP3i4oisWqErNUPRYwvk8oxfe48vIllw2oHoxFaJVEHq"
+    }
+
+    connection = http.client.HTTPSConnection("graph.facebook.com")
+
+    try:
+        connection.request("POST","/v21.0/489807960875135/messages", data, headers)
+        response = connection.getresponse()
+        print(response.status, response.reason)
+    except Exception as e:
+        agregar_mensajes_log(json.dumps(e))
+    finally:
+        connection.close()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+     app.run(debug=True)
 
 
 
